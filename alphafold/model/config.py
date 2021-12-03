@@ -263,6 +263,7 @@ CONFIG = ml_collections.ConfigDict({
             'backprop_dgram': False,
             'seq_channel': 384,
             'template': {
+                'backprop_dgram': False,
                 'attention': {
                     'gating': False,
                     'key_dim': 64,
