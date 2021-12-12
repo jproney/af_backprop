@@ -1533,6 +1533,8 @@ class OuterProductMean(hk.Module):
 
     return act
 
+def straight_through_threshold(x):
+  return x + jax.lax.stop_gradient((x > 0).astype(jnp.float32) - x)
 
 def dgram_from_positions(positions, num_bins, min_bin, max_bin, backprop=False):
   """Compute distogram from amino acid positions.
@@ -1560,7 +1562,9 @@ def dgram_from_positions(positions, num_bins, min_bin, max_bin, backprop=False):
       axis=-1, keepdims=True)
 
   if backprop:
-    dgram = jax.nn.sigmoid((dist2 - lower_breaks)) * jax.nn.sigmoid((upper_breaks - dist2))
+    # use straight-through estimator for gradient
+    dgram = straight_through_threshold(dist2 - lower_breaks) * straight_through_threshold(upper_breaks - dist2)
+
   else:
     dgram = ((dist2 > lower_breaks).astype(jnp.float32) * (dist2 < upper_breaks).astype(jnp.float32))
   return dgram
