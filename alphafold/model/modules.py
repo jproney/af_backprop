@@ -2012,12 +2012,12 @@ class SingleTemplateEmbedding(hk.Module):
     template_mask_2d = template_mask[:, None] * template_mask[None, :]
     template_mask_2d = template_mask_2d.astype(dtype)
 
-    if not self.config.raw_template_dgram:
-      template_dgram = dgram_from_positions(batch['template_pseudo_beta'],
-                                            **self.config.dgram_features,
-                                            backprop=self.config.backprop_dgram) 
-    else:
+    if self.config.raw_template_dgram and 'template_dmat' in batch:
       template_dgram = dgram_from_dmat(batch['template_dmat'],
+                                      **self.config.dgram_features,
+                                      backprop=self.config.backprop_dgram) 
+    else:
+      template_dgram = dgram_from_positions(batch['template_pseudo_beta'],
                                             **self.config.dgram_features,
                                             backprop=self.config.backprop_dgram) 
 
