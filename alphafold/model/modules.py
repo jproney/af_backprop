@@ -1580,10 +1580,10 @@ def dgram_from_dmat(dmat, num_bins, min_bin, max_bin, backprop=False):
 
   if backprop:
     # use straight-through estimator for gradient
-    #dgram = straight_through_threshold(dmat - lower_breaks) * straight_through_threshold(upper_breaks - dmat)
+    dgram = straight_through_threshold(dmat - lower_breaks) * straight_through_threshold(upper_breaks - dmat)
 
     # use soft distogram
-    dgram = jax.nn.sigmoid((dmat - lower_breaks)) * jax.nn.sigmoid((upper_breaks - dmat))
+    #dgram = jax.nn.sigmoid((dmat - lower_breaks)) * jax.nn.sigmoid((upper_breaks - dmat))
 
   else:
     dgram = ((dmat > lower_breaks).astype(jnp.float32) * (dmat < upper_breaks).astype(jnp.float32))
