@@ -1906,12 +1906,21 @@ class EmbeddingsAndEvoformer(hk.Module):
 
       # Embed the templates aatype, torsion angles and masks.
       # Shape (templates, residues, msa_channels)
-      ret = all_atom.atom37_to_torsion_angles(
-          aatype=batch['template_aatype'],
-          all_atom_pos=batch['template_all_atom_positions'],
-          all_atom_mask=batch['template_all_atom_masks'],
-          # Ensure consistent behaviour during testing:
-          placeholder_for_undefined=not gc.zero_init)
+
+      if c.raw_template_torsions and 'template_torsions' in batch:
+        ret = all_atom.process_template_torsions(
+            aatype=batch['template_aatype'],
+            input_torsions=batch['template_torsions'],
+            all_atom_mask=batch['template_all_atom_masks'],
+            # Ensure consistent behaviour during testing:
+            placeholder_for_undefined=not gc.zero_init)
+      else:
+        ret = all_atom.atom37_to_torsion_angles(
+            aatype=batch['template_aatype'],
+            all_atom_pos=batch['template_all_atom_positions'],
+            all_atom_mask=batch['template_all_atom_masks'],
+            # Ensure consistent behaviour during testing:
+            placeholder_for_undefined=not gc.zero_init)
 
       template_features = jnp.concatenate([
           aatype_one_hot,

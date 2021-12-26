@@ -266,6 +266,7 @@ CONFIG = ml_collections.ConfigDict({
                 'backprop_dgram': False,
                 'raw_template_dgram_binned' : False,
                 'raw_template_dgram' : False,
+                'raw_template_torsions' : False, 
                 'attention': {
                     'gating': False,
                     'key_dim': 64,
