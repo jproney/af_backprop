@@ -1907,7 +1907,7 @@ class EmbeddingsAndEvoformer(hk.Module):
       # Embed the templates aatype, torsion angles and masks.
       # Shape (templates, residues, msa_channels)
 
-      if c.raw_template_torsions and 'template_torsions' in batch:
+      if c.template.raw_template_torsions and 'template_torsions' in batch:
         ret = all_atom.process_template_torsions(
             aatype=batch['template_aatype'],
             input_torsions=batch['template_torsions'],
