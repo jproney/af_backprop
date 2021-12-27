@@ -512,10 +512,6 @@ def process_template_torsions(
 
 
 
-  # Mirror psi, because we computed it from the Oxygen-atom.
-  torsion_angles_sin_cos *= jnp.asarray(
-      [1., 1., -1., 1., 1., 1., 1.])[None, None, :, None]
-
   # Create alternative angles for ambiguous atom names.
   chi_is_ambiguous = utils.batched_gather(
       jnp.asarray(residue_constants.chi_pi_periodic), aatype)
