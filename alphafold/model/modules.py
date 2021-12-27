@@ -1910,7 +1910,7 @@ class EmbeddingsAndEvoformer(hk.Module):
       if c.template.raw_template_torsions and 'template_torsions' in batch:
         ret = all_atom.process_template_torsions(
             aatype=batch['template_aatype'],
-            input_torsions=batch['template_torsions'],
+            torsion_angles_sin_cos=batch['template_torsions'],
             all_atom_mask=batch['template_all_atom_masks'],
             # Ensure consistent behaviour during testing:
             placeholder_for_undefined=not gc.zero_init)
