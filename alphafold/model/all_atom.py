@@ -446,7 +446,7 @@ def atom37_to_torsion_angles(
 
 def process_template_torsions(
     aatype: jnp.ndarray,  # (B, N)
-    input_torsions: jnp.ndarray,  # (B, N, 7, 2)
+    torsion_angles_sin_cos: jnp.ndarray,  # (B, N, 7, 2)
     all_atom_mask: jnp.ndarray,  # (B, N, 37)
     placeholder_for_undefined=False,
 ) -> Dict[str, jnp.ndarray]:
@@ -513,7 +513,7 @@ def process_template_torsions(
 
 
   # Mirror psi, because we computed it from the Oxygen-atom.
-  input_torsions *= jnp.asarray(
+  torsion_angles_sin_cos *= jnp.asarray(
       [1., 1., -1., 1., 1., 1., 1.])[None, None, :, None]
 
   # Create alternative angles for ambiguous atom names.
@@ -523,16 +523,16 @@ def process_template_torsions(
       [jnp.ones([num_batch, num_res, 3]),
        1.0 - 2.0 * chi_is_ambiguous], axis=-1)
   alt_torsion_angles_sin_cos = (
-      input_torsions * mirror_torsion_angles[:, :, :, None])
+      torsion_angles_sin_cos * mirror_torsion_angles[:, :, :, None])
 
   if placeholder_for_undefined:
     # Add placeholder torsions in place of undefined torsion angles
     # (e.g. N-terminus pre-omega)
     placeholder_torsions = jnp.stack([
-        jnp.ones(input_torsions.shape[:-1]),
-        jnp.zeros(input_torsions.shape[:-1])
+        jnp.ones(torsion_angles_sin_cos.shape[:-1]),
+        jnp.zeros(torsion_angles_sin_cos.shape[:-1])
     ], axis=-1)
-    torsion_angles_sin_cos = input_torsions * torsion_angles_mask[
+    torsion_angles_sin_cos = torsion_angles_sin_cos * torsion_angles_mask[
         ..., None] + placeholder_torsions * (1 - torsion_angles_mask[..., None])
     alt_torsion_angles_sin_cos = alt_torsion_angles_sin_cos * torsion_angles_mask[
         ..., None] + placeholder_torsions * (1 - torsion_angles_mask[..., None])
