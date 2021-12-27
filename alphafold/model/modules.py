@@ -414,8 +414,8 @@ class AlphaFold(hk.Module):
     if compute_loss:
       ret = ret[0], [ret[1]]
 
-    if not return_representations:
-      del (ret[0] if compute_loss else ret)['representations']  # pytype: disable=unsupported-operands
+    #if not return_representations:
+    #  del (ret[0] if compute_loss else ret)['representations']  # pytype: disable=unsupported-operands
 
     if self.config.add_prev and num_iter > 0:
       prev_ = add_prev(prev, prev_)
