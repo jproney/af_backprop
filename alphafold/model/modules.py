@@ -1913,7 +1913,7 @@ class EmbeddingsAndEvoformer(hk.Module):
             torsion_angles_sin_cos=batch['template_torsions'],
             all_atom_mask=batch['template_all_atom_masks'],
             # Ensure consistent behaviour during testing:
-            placeholder_for_undefined=not gc.zero_init)
+            placeholder_for_undefined=True)
       else:
         ret = all_atom.atom37_to_torsion_angles(
             aatype=batch['template_aatype'],
