@@ -1987,9 +1987,6 @@ class EmbeddingsAndEvoformer(hk.Module):
     output = {
         'single': single_activations,
         'pair': pair_activations,
-        'templates_sin_cos': ret['torsion_angles_sin_cos'],
-        'templates_alt' : ret['alt_torsion_angles_sin_cos'],
-        'templates_mask': ret['torsion_angles_mask'],
         # Crop away template rows such that they are not used in MaskedMsaHead.
         'msa': msa_activations[:num_sequences, :, :],
         'msa_first_row': msa_activations[0],
